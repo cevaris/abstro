@@ -1,5 +1,5 @@
-## AbstO (Abstracted Objects)
+## AbstrO (Abstracted Objects)
 
-- Abstracts Queues to  Kafka
+- Abstracts Queues  to Kafka
 - Abstracts Objects to Redis
-- Abstracts Data to ElasticSearch
+- Abstracts Data    to ElasticSearch

@@ -1,17 +1,11 @@
 package com.cevaris.abstro.base;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import redis.clients.jedis.Jedis;
@@ -44,8 +38,7 @@ public class ArrayList<E> implements List<E>{
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.client.llen(this.key) == 0L;
 	}
 
 	public boolean contains(Object o) {
@@ -69,10 +62,7 @@ public class ArrayList<E> implements List<E>{
 	}
 
 	public boolean add(E e) {
-		if(e instanceof Integer){
-			this.clazz = Integer.class;
-		}
-//		LOG.info(String.format("Detected type: ", this.clazz.getClass().getSimpleName()));
+		detectType(e);
 		return this.client.rpush(this.key, e.toString()) > 0L;
 	}
 
@@ -114,22 +104,21 @@ public class ArrayList<E> implements List<E>{
 	public E get(int index) {
 		
 		List<String> results = this.client.lrange(this.key, index, index);
+		String result = null;
 		if(results.size() != 1) {
 			return null;
-		} else {			
-			if (this.clazz == Integer.class){
-//				return (E) new String("TEST");//Integer.parseInt(results.get(0));
-				return castTo(Integer.parseInt(results.get(0)));
-			}
+		} else {
+			result = results.get(0);
 		}
 		
+		if (this.clazz == Integer.class){
+			return castTo(Integer.parseInt(result));
+		} else if(this.clazz == Long.class) {
+			return castTo(Long.parseLong(result));
+		} else {
+			return castTo(result);
+		}
 		
-		return null;
-//		E o = new E(this.client.lrange(this.key, index, index));
-//		return o;
-//		return this.client.rpush(this.key, e.toString()) > 0L;
-		// TODO Auto-generated method stub
-//		return null;
 	}
 
 	public E set(int index, E element) {
@@ -172,10 +161,34 @@ public class ArrayList<E> implements List<E>{
 		return null;
 	}
 	
+	
+	// Custom definitions
+	
 	@SuppressWarnings("unchecked")
-	public E castTo(Object obj) {
-		// Only call after checking type
+	public E castTo(final Object obj) {
+		// Only call after checking type!!!
 		return (E) obj;
+	}
+	
+	private void detectType(E e) {
+		if(e instanceof Integer){
+			this.clazz = Integer.class;
+		} else if(e instanceof Long){
+			this.clazz = Long.class;
+		} else {
+			this.clazz = String.class;
+		}
+	}
+	
+	private boolean destroy(){
+		return this.client.del(this.key) > 0;
+	}
+	
+	@Override
+	public void finalize() throws Throwable {
+		LOG.info("Deleted Object: "+this.key);
+		destroy();
+		super.finalize();
 	}
 	
 }
