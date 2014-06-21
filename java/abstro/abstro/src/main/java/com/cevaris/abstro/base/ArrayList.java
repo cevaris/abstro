@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
+import com.cevaris.abstro.Utils;
+
 import redis.clients.jedis.Jedis;
 
 public class ArrayList<E> implements List<E>{
@@ -57,13 +59,14 @@ public class ArrayList<E> implements List<E>{
 
 		int i = 0;
 		for(String item : results){
-			if (this.clazz == Integer.class){
-				os[i] = castTo(Integer.parseInt(item));
-			} else if(this.clazz == Long.class) {
-				os[i] = castTo(Long.parseLong(item));
-			} else {
-				os[i] = castTo(item);
-			}
+//			if (this.clazz == Integer.class){
+//				os[i] = castTo(Integer.parseInt(item));
+//			} else if(this.clazz == Long.class) {
+//				os[i] = castTo(Long.parseLong(item));
+//			} else {
+//				os[i] = castTo(item);
+//			}
+			os[i] = Utils.decode(item, this.clazz);
 			i++;
 		}
 		return os;
@@ -75,13 +78,14 @@ public class ArrayList<E> implements List<E>{
 
 		int i = 0;
 		for(String item : results){
-			if (this.clazz == Integer.class){
-				a[i] = (T) castTo(Integer.parseInt(item));
-			} else if(this.clazz == Long.class) {
-				a[i] = (T) castTo(Long.parseLong(item));
-			} else {
-				a[i] = (T) castTo(item);
-			}
+//			if (this.clazz == Integer.class){
+//				a[i] = (T) castTo(Integer.parseInt(item));
+//			} else if(this.clazz == Long.class) {
+//				a[i] = (T) castTo(Long.parseLong(item));
+//			} else {
+//				a[i] = (T) castTo(item);
+//			}
+			a[i] = (T) Utils.decode(item, this.clazz);
 			i++;
 		}
 		return a;
@@ -89,12 +93,12 @@ public class ArrayList<E> implements List<E>{
 
 	public boolean add(E e) {
 		detectType(e);
-		return this.client.rpush(this.key, e.toString()) > 0L;
+		return this.client.rpush(this.key, Utils.encode(e)) > 0L;
 	}
 
 	public boolean remove(Object o) {
-		String obj = o.toString();
-		return this.client.lrem(this.key, 1, obj) > 0L;
+//		String obj = o.toString();
+		return this.client.lrem(this.key, 1, Utils.encode(o)) > 0L;
 	}
 
 	public boolean containsAll(Collection<?> c) {
@@ -134,20 +138,21 @@ public class ArrayList<E> implements List<E>{
 		} else {
 			result = results.get(0);
 		}
+		return castTo(Utils.decode(result, this.clazz));
 		
-		if (this.clazz == Integer.class){
-			return castTo(Integer.parseInt(result));
-		} else if(this.clazz == Long.class) {
-			return castTo(Long.parseLong(result));
-		} else {
-			return castTo(result);
-		}
+//		if (this.clazz == Integer.class){
+//			return castTo(Integer.parseInt(result));
+//		} else if(this.clazz == Long.class) {
+//			return castTo(Long.parseLong(result));
+//		} else {
+//			return castTo(result);
+//		}
 		
 	}
 
 	public E set(int index, E element) {
 		detectType(element);
-		if (this.client.lset(this.key, (long)index, element.toString()) != null){
+		if (this.client.lset(this.key, (long)index, Utils.encode(element)) != null){
 			return element;			
 		} else {
 			return null;
