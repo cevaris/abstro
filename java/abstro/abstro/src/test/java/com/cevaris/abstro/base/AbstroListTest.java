@@ -90,7 +90,7 @@ public class AbstroListTest extends TestCase {
         assertTrue(alist.get(2).equalsIgnoreCase("c"));
     }
 	
-	public void testSet() {
+	public void testSetItem() {
         List<String> alist = new ArrayList<String>();
         assertNotNull(alist);
         assertTrue(alist.add("a"));
@@ -101,6 +101,47 @@ public class AbstroListTest extends TestCase {
         assertTrue(alist.get(1).equalsIgnoreCase("d"));
         assertEquals(alist.size(), 3);
     }
+	
+	public void testRemove() {
+        List<Long> alist = new ArrayList<Long>();
+        assertNotNull(alist);
+        assertTrue(alist.add(10L));
+        assertTrue(alist.add(15L));
+        assertTrue(alist.add(16L));
+        assertTrue(10 == alist.get(0));
+        assertTrue(15 == alist.get(1));
+        assertTrue(16 == alist.get(2));
+        assertTrue(alist.remove(15L));
+    }
+	
+	
+	public void testToArrayCopy() {
+        List<Long> alist = new ArrayList<Long>();
+        assertNotNull(alist);
+        assertTrue(alist.add(10L));
+        assertTrue(alist.add(15L));
+        assertTrue(alist.add(16L));
+        Long blist[] = new Long[alist.size()];
+        assertNotNull(alist.toArray(blist));
+        System.out.print("{ ");
+        for(Long l : blist) { System.out.print(l +", "); }
+        System.out.println("}");
+    }
+	
+	public void testToArray() {
+        List<Long> alist = new ArrayList<Long>();
+        assertNotNull(alist);
+        assertTrue(alist.add(10L));
+        assertTrue(alist.add(15L));
+        assertTrue(alist.add(16L));
+        Object blist[] = alist.toArray();
+        assertNotNull(blist);
+        System.out.print("{ ");
+        for(Object l : blist) { System.out.print(l +", "); }
+        System.out.println("}");
+    }
+	
+	
 	
 	
 }

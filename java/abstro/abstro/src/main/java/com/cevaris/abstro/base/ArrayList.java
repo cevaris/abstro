@@ -52,13 +52,39 @@ public class ArrayList<E> implements List<E>{
 	}
 
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> results = this.client.lrange(this.key, 0, -1);
+		Object os[] = new Object[size()]; 
+
+		int i = 0;
+		for(String item : results){
+			if (this.clazz == Integer.class){
+				os[i] = castTo(Integer.parseInt(item));
+			} else if(this.clazz == Long.class) {
+				os[i] = castTo(Long.parseLong(item));
+			} else {
+				os[i] = castTo(item);
+			}
+			i++;
+		}
+		return os;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> results = this.client.lrange(this.key, 0, -1);
+
+		int i = 0;
+		for(String item : results){
+			if (this.clazz == Integer.class){
+				a[i] = (T) castTo(Integer.parseInt(item));
+			} else if(this.clazz == Long.class) {
+				a[i] = (T) castTo(Long.parseLong(item));
+			} else {
+				a[i] = (T) castTo(item);
+			}
+			i++;
+		}
+		return a;
 	}
 
 	public boolean add(E e) {
@@ -67,33 +93,32 @@ public class ArrayList<E> implements List<E>{
 	}
 
 	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		String obj = o.toString();
+		return this.client.lrem(this.key, 1, obj) > 0L;
 	}
 
 	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public boolean addAll(Collection<? extends E> c) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result = true;
+		for(E e : c){
+			result = result && add(e);
+		}
+		return result;
 	}
 
 	public boolean addAll(int index, Collection<? extends E> c) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public void clear() {
@@ -130,13 +155,11 @@ public class ArrayList<E> implements List<E>{
 	}
 
 	public void add(int index, E element) {
-		// TODO Auto-generated method stub
-		
+		set(index, element);
 	}
 
 	public E remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public int indexOf(Object o) {
