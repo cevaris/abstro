@@ -97,8 +97,7 @@ public class ArrayList<E> implements List<E>{
 	}
 
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		destroy();
 	}
 
 	public E get(int index) {
@@ -122,8 +121,12 @@ public class ArrayList<E> implements List<E>{
 	}
 
 	public E set(int index, E element) {
-		// TODO Auto-generated method stub
-		return null;
+		detectType(element);
+		if (this.client.lset(this.key, (long)index, element.toString()) != null){
+			return element;			
+		} else {
+			return null;
+		}
 	}
 
 	public void add(int index, E element) {

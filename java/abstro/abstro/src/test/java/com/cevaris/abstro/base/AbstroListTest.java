@@ -90,5 +90,17 @@ public class AbstroListTest extends TestCase {
         assertTrue(alist.get(2).equalsIgnoreCase("c"));
     }
 	
+	public void testSet() {
+        List<String> alist = new ArrayList<String>();
+        assertNotNull(alist);
+        assertTrue(alist.add("a"));
+        assertTrue(alist.add("b"));
+        assertTrue(alist.add("c"));
+        assertTrue(alist.get(1).equalsIgnoreCase("b"));
+        assertNotNull(alist.set(1, "d"));
+        assertTrue(alist.get(1).equalsIgnoreCase("d"));
+        assertEquals(alist.size(), 3);
+    }
+	
 	
 }
