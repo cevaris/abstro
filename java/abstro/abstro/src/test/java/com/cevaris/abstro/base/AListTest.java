@@ -170,6 +170,4 @@ public class AListTest extends TestCase {
     }
 	
 	
-	
-	
 }

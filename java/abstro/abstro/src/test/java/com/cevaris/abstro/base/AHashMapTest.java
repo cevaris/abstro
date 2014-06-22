@@ -2,7 +2,14 @@ package com.cevaris.abstro.base;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -81,6 +88,16 @@ Jedis client = new Jedis("localhost", 6379);
         assertTrue(aMap.containsKey("b"));
     }
 	
+	public void testContainsValue() {
+        Map<String, Integer> aMap = new AHashMap<String, Integer>();
+        assertNotNull(aMap);
+        assertNotNull(aMap.put("a", 1));
+        assertNotNull(aMap.put("b", 2));
+        
+        assertTrue(aMap.containsValue(1));
+        assertTrue(aMap.containsValue(2));
+    }
+	
 	public void testRemove() {
         Map<String, Integer> aMap = new AHashMap<String, Integer>();
         assertNotNull(aMap);
@@ -90,7 +107,47 @@ Jedis client = new Jedis("localhost", 6379);
         assertTrue(aMap.get("a") == 1);
         assertEquals(1, aMap.remove("a").intValue());
         assertNull(aMap.get("a"));
+    }
+	
+	public void testKeysSet() {
+        Map<String, Integer> aMap = new AHashMap<String, Integer>();
+        assertNotNull(aMap);
+        assertNotNull(aMap.put("a", 1));
+        assertNotNull(aMap.put("b", 2));
         
+        Set<String> eKeys = new HashSet<String>();
+        eKeys.add("a");
+        eKeys.add("b");
+        
+        assertEquals(eKeys, aMap.keySet());
+    }
+	
+	public void testValList() {
+        Map<String, Integer> aMap = new AHashMap<String, Integer>();
+        assertNotNull(aMap);
+        assertNotNull(aMap.put("a", 1));
+        assertNotNull(aMap.put("b", 2));
+        
+        List<Integer> eInts = new ArrayList<Integer>();
+        eInts.add(1);
+        eInts.add(2);
+        
+        List<Integer> aInts = (List<Integer>) aMap.values();
+        Collections.sort( aInts );
+        assertEquals(eInts, aInts);
+    }
+	
+	
+	public void testEntrySet() {
+        Map<String, Integer> aMap = new AHashMap<String, Integer>();
+        assertNotNull(aMap.put("a", 1));
+        assertNotNull(aMap.put("b", 2));
+        
+        Map<String, Integer> eMap = new HashMap<String, Integer>();
+        eMap.put("a",1);
+        eMap.put("b",2);
+        
+        assertEquals(eMap.entrySet(), aMap.entrySet());
     }
 
 }

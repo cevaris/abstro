@@ -1,8 +1,10 @@
 package com.cevaris.abstro.base;
 
 import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -10,6 +12,8 @@ import java.util.logging.Logger;
 import com.cevaris.abstro.Utils;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
 public class AHashMap<K, V> implements Map<K, V>, Serializable{
 
@@ -41,13 +45,32 @@ public class AHashMap<K, V> implements Map<K, V>, Serializable{
 	}
 
 	public boolean containsValue(Object value) {
-		throw new UnsupportedOperationException("Not Implmented");
+		ScanParams params = new ScanParams();
+        params.match(Utils.encode(value));
+        boolean scanningDone = false;
+        String start = ScanParams.SCAN_POINTER_START;
+        while (!scanningDone) {
+        	System.out.println(Utils.encode(value));
+        	System.out.println(this.client.hvals(this.key));
+            ScanResult<Entry<String, String>> scanResults = this.client.hscan(this.key, start, params);
+            System.out.println(scanResults.getResult().size());
+            for (Entry<String, String> scanResult : scanResults.getResult()) {
+            	System.out.println(value + " " + Utils.decode(scanResult.getValue()));
+            	if(Utils.decode(scanResult.getValue()) == value) return true;
+            }
+            start = scanResults.getStringCursor();
+            if (start.equalsIgnoreCase("0")) {
+                scanningDone = true;
+            }
+//            System.out.println(scanResults.getStringCursor());
+        }
+        return false;
 	}
 
 	public V get(Object key) {
 		String val = this.client.hget(this.key, Utils.encode(key));
 		if(val != null){
-			return castTo(Utils.decode(val));
+			return castToV(Utils.decode(val));
 		} else {
 			return null;
 		}
@@ -79,31 +102,49 @@ public class AHashMap<K, V> implements Map<K, V>, Serializable{
 	}
 
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		destroy();
 	}
 
 	public Set<K> keySet() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<K> kSet = new HashSet<K>();
+		
+		for(String str : this.client.hkeys(this.key))
+			kSet.add(castToK(Utils.decode(str)));
+	
+		return kSet;
 	}
 
 	public Collection<V> values() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<V> vList = new ArrayList<V>();
+		
+		for(String str : this.client.hvals(this.key))
+			vList.add(castToV(Utils.decode(str)));
+		
+		return vList;
 	}
 
 	public Set<java.util.Map.Entry<K, V>> entrySet() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<java.util.Map.Entry<K, V>> kvSet = new HashSet<java.util.Map.Entry<K,V>>();
+		for(Entry<String,String> tmp : this.client.hgetAll(this.key).entrySet()) {
+			kvSet.add(new AbstractMap.SimpleEntry<K, V>(
+					castToK(Utils.decode(tmp.getKey())), 
+					castToV(Utils.decode(tmp.getValue())) ));
+		}
+	    return kvSet;
 	}
 	
 	// Custom methods
 	
 	@SuppressWarnings("unchecked")
-	public V castTo(final Object obj) {
+	public V castToV(final Object obj) {
 		// Only call after checking type!!!
 		return (V) obj;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public K castToK(final Object obj) {
+		// Only call after checking type!!!
+		return (K) obj;
 	}
 	
 	private boolean destroy(){
