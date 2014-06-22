@@ -20,8 +20,6 @@ public class AHashMap<K, V> implements Map<K, V>, Serializable{
 	private Jedis client = null;
 	private String key   = null;
 	
-	private Class<?> clazz;
-	
 	public AHashMap() {
 		this.client = new Jedis("localhost", 6379);
 		this.key = Utils.slug();
@@ -31,28 +29,29 @@ public class AHashMap<K, V> implements Map<K, V>, Serializable{
 
 
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.client.hlen(this.key).intValue();
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.client.hlen(this.key) == 0L;
 	}
 
-	public boolean containsKey(Object key) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean containsKey(Object hKey) {
+		return this.client.hexists(this.key, Utils.encode(hKey));
 	}
 
 	public boolean containsValue(Object value) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public V get(Object key) {
 		String val = this.client.hget(this.key, Utils.encode(key));
-		return castTo(Utils.decode(val));
+		if(val != null){
+			return castTo(Utils.decode(val));
+		} else {
+			return null;
+		}
+		
 	}
 
 	public V put(K hKey, V value) {
@@ -66,8 +65,12 @@ public class AHashMap<K, V> implements Map<K, V>, Serializable{
 	}
 
 	public V remove(Object key) {
-		// TODO Auto-generated method stub
-		return null;
+		V val = get(key);
+		if(this.client.hdel(this.key, Utils.encode(key)) > 0L){
+			return val; 
+		} else {
+			return null;
+		}
 	}
 
 	public void putAll(Map<? extends K, ? extends V> m) {
@@ -102,16 +105,6 @@ public class AHashMap<K, V> implements Map<K, V>, Serializable{
 		// Only call after checking type!!!
 		return (V) obj;
 	}
-
-//	private void detectType(E e) {
-//		if(e instanceof Integer){
-//			this.clazz = Integer.class;
-//		} else if(e instanceof Long){
-//			this.clazz = Long.class;
-//		} else {
-//			this.clazz = String.class;
-//		}
-//	}
 	
 	private boolean destroy(){
 		return this.client.del(this.key) > 0;

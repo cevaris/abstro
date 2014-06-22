@@ -18,7 +18,7 @@ Jedis client = new Jedis("localhost", 6379);
     public void tearDown() {
 		// Clears up previous entries		
 		for(String key : client.keys("*")){
-			client.del(key);
+//			client.del(key);
 		}
     }
 	
@@ -27,7 +27,7 @@ Jedis client = new Jedis("localhost", 6379);
         assertNotNull(aMap);
     }
 	
-	public void testPutGet() {
+	public void testPutGetInt() {
         Map<String, Integer> aMap = new AHashMap<String, Integer>();
         assertNotNull(aMap);
         assertNotNull(aMap.put("a", 1));
@@ -41,5 +41,56 @@ Jedis client = new Jedis("localhost", 6379);
     }
 	
 	
+	public void testPutGetInventory() {
+        Map<String, Inventory> aMap = new AHashMap<String, Inventory>();
+        assertNotNull(aMap);
+        Inventory aInv = new Inventory();
+        Inventory bInv = new Inventory();
+        assertNotNull(aMap.put("a", aInv));
+        assertNotNull(aMap.put("b", bInv));
+        
+        assertTrue(aMap.get("a").getClass() == Inventory.class);
+        assertTrue(aMap.get("b").getClass() == Inventory.class);
+        
+        Inventory aaInv = aMap.get("a");
+        Inventory bbInv = aMap.get("b");
+        
+        assertTrue(aInv.toString().equalsIgnoreCase(aaInv.toString()));
+        assertTrue(bInv.toString().equalsIgnoreCase(bbInv.toString()));
+    }
+	
+	public void testPutSize() {
+        Map<String, Integer> aMap = new AHashMap<String, Integer>();
+        assertNotNull(aMap);
+        assertTrue(aMap.size() == 0);
+        assertTrue(aMap.isEmpty());
+        assertNotNull(aMap.put("a", 1));
+        assertNotNull(aMap.put("b", 2));
+        
+        assertTrue(aMap.size() == 2);
+        assertTrue(!aMap.isEmpty());
+    }
+	
+	public void testContainsKey() {
+        Map<String, Integer> aMap = new AHashMap<String, Integer>();
+        assertNotNull(aMap);
+        assertNotNull(aMap.put("a", 1));
+        assertNotNull(aMap.put("b", 2));
+        
+        assertTrue(aMap.containsKey("a"));
+        assertTrue(aMap.containsKey("b"));
+    }
+	
+	public void testRemove() {
+        Map<String, Integer> aMap = new AHashMap<String, Integer>();
+        assertNotNull(aMap);
+        assertNotNull(aMap.put("a", 1));
+        assertNotNull(aMap.put("b", 2));
+        
+        assertTrue(aMap.get("a") == 1);
+        assertEquals(1, aMap.remove("a").intValue());
+        assertNull(aMap.get("a"));
+        
+    }
 
 }
