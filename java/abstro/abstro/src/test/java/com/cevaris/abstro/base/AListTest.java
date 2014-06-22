@@ -1,18 +1,14 @@
 package com.cevaris.abstro.base;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.AfterClass;
-
-import com.cevaris.abstro.Utils;
 
 import redis.clients.jedis.Jedis;
 
 import junit.framework.TestCase;
 
-public class AbstroListTest extends TestCase {
+public class AListTest extends TestCase {
 	
 	Jedis client = new Jedis("localhost", 6379);
 	

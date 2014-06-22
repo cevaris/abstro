@@ -1,5 +1,6 @@
 package com.cevaris.abstro.base;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -10,8 +11,10 @@ import com.cevaris.abstro.Utils;
 
 import redis.clients.jedis.Jedis;
 
-public class AArrayList<E> implements List<E>{
-	
+public class AArrayList<E> implements List<E>, Serializable{
+
+	private static final long serialVersionUID = -9000435396629790361L;
+
 	private final static Logger LOG = Logger.getLogger(AArrayList.class.getName()); 
 	
 	private Jedis client = null;
