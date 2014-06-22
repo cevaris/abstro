@@ -5,12 +5,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
 
 public class Utils {
 	
-	private static final Base64 b64 = new Base64();
+	public static final Base64 b64 = new Base64();
+	public static final SecureRandom srandom = new SecureRandom();
+	
+	public static String slug(){ return slug(15); }
+	public static String slug(int length){
+		if(length <= 36){
+			return UUID.randomUUID().toString().substring(length);
+		} else {
+			return UUID.randomUUID().toString();
+		}
+	}
 	
 	public static String encode(Object object) {
 		String encoded = null;
@@ -21,7 +34,7 @@ public class Utils {
 			objectOutputStream.writeObject(object);
 			objectOutputStream.close();
 			
-			encoded = new String(b64.encode(byteArrayOutputStream.toByteArray()));
+			encoded = new String(Utils.b64.encode(byteArrayOutputStream.toByteArray()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -30,7 +43,7 @@ public class Utils {
 
 	@SuppressWarnings("unchecked")
 	public static <t extends Object, T> T decode(String string, Class<t> clazz) {
-		byte[] bytes = b64.decode(string.getBytes());
+		byte[] bytes = Utils.b64.decode(string.getBytes());
 		T object = null;
 		try {
 			ObjectInputStream objectInputStream = new ObjectInputStream(
