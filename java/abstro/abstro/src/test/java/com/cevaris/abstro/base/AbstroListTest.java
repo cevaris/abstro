@@ -1,8 +1,11 @@
 package com.cevaris.abstro.base;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.AfterClass;
+
+import com.cevaris.abstro.Utils;
 
 import redis.clients.jedis.Jedis;
 
@@ -11,6 +14,20 @@ import junit.framework.TestCase;
 public class AbstroListTest extends TestCase {
 	
 	Jedis client = new Jedis("localhost", 6379);
+	
+	class Inventory {
+		private List<Item> items;
+		public Inventory() {
+			this.items = new ArrayList<Item>();
+			this.items.add(new Item());
+		}
+	}
+	class Item {
+		private String name;
+		public Item() {
+			this.name = Utils.slug();
+		}
+	}
 	
 	@AfterClass
     public void tearDown() {
@@ -21,12 +38,12 @@ public class AbstroListTest extends TestCase {
     }
 	
 	public void testCreate() {
-        List<Integer> alist = new ArrayList<Integer>();
+        List<Integer> alist = new AArrayList<Integer>();
         assertNotNull(alist);
     }
 	
 	public void testSize() {
-        List<Integer> alist = new ArrayList<Integer>();
+        List<Integer> alist = new AArrayList<Integer>();
         assertNotNull(alist);
         assertEquals(alist.size(), 0);
         alist.add(10);
@@ -36,7 +53,7 @@ public class AbstroListTest extends TestCase {
     }
 	
 	public void testIsEmpty() {
-        List<Integer> alist = new ArrayList<Integer>();
+        List<Integer> alist = new AArrayList<Integer>();
         assertNotNull(alist);
         assertEquals(alist.size(), 0);
         assertEquals(alist.isEmpty(), true);
@@ -47,7 +64,7 @@ public class AbstroListTest extends TestCase {
     }
 	
 	public void testAdd() {
-        List<Integer> alist = new ArrayList<Integer>();
+        List<Integer> alist = new AArrayList<Integer>();
         assertNotNull(alist);
         assertTrue(alist.add(10));
         assertTrue(alist.add(15));
@@ -58,7 +75,7 @@ public class AbstroListTest extends TestCase {
     }
 	
 	public void testInt() {
-        List<Integer> alist = new ArrayList<Integer>();
+        List<Integer> alist = new AArrayList<Integer>();
         assertNotNull(alist);
         assertTrue(alist.add(10));
         assertTrue(alist.add(15));
@@ -69,7 +86,7 @@ public class AbstroListTest extends TestCase {
     }
 	
 	public void testLong() {
-        List<Long> alist = new ArrayList<Long>();
+        List<Long> alist = new AArrayList<Long>();
         assertNotNull(alist);
         assertTrue(alist.add(10L));
         assertTrue(alist.add(15L));
@@ -80,18 +97,20 @@ public class AbstroListTest extends TestCase {
     }
 	
 	public void testString() {
-        List<String> alist = new ArrayList<String>();
+        List<String> alist = new AArrayList<String>();
         assertNotNull(alist);
-        assertTrue(alist.add("a"));
-        assertTrue(alist.add("b"));
-        assertTrue(alist.add("c"));
-        assertTrue(alist.get(0).equalsIgnoreCase("a"));
-        assertTrue(alist.get(1).equalsIgnoreCase("b"));
-        assertTrue(alist.get(2).equalsIgnoreCase("c"));
+        assertTrue(alist.add("michio kaku"));
+        assertTrue(alist.add("kanye west"));
+        assertTrue(alist.add("will smith"));
+        assertTrue(alist.add("james franco"));
+        assertTrue(alist.get(0).equalsIgnoreCase("michio kaku"));
+        assertTrue(alist.get(1).equalsIgnoreCase("kanye west"));
+        assertTrue(alist.get(2).equalsIgnoreCase("will smith"));
+        assertTrue(alist.get(3).equalsIgnoreCase("james franco"));
     }
 	
 	public void testSetItem() {
-        List<String> alist = new ArrayList<String>();
+        List<String> alist = new AArrayList<String>();
         assertNotNull(alist);
         assertTrue(alist.add("a"));
         assertTrue(alist.add("b"));
@@ -103,7 +122,7 @@ public class AbstroListTest extends TestCase {
     }
 	
 	public void testRemove() {
-        List<Long> alist = new ArrayList<Long>();
+        List<Long> alist = new AArrayList<Long>();
         assertNotNull(alist);
         assertTrue(alist.add(10L));
         assertTrue(alist.add(15L));
@@ -116,7 +135,7 @@ public class AbstroListTest extends TestCase {
 	
 	
 	public void testToArrayCopy() {
-        List<Long> alist = new ArrayList<Long>();
+        List<Long> alist = new AArrayList<Long>();
         assertNotNull(alist);
         assertTrue(alist.add(10L));
         assertTrue(alist.add(15L));
@@ -129,7 +148,7 @@ public class AbstroListTest extends TestCase {
     }
 	
 	public void testToArray() {
-        List<Long> alist = new ArrayList<Long>();
+        List<Long> alist = new AArrayList<Long>();
         assertNotNull(alist);
         assertTrue(alist.add(10L));
         assertTrue(alist.add(15L));

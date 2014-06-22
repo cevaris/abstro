@@ -12,26 +12,21 @@ import com.cevaris.abstro.Utils;
 
 import redis.clients.jedis.Jedis;
 
-public class ArrayList<E> implements List<E>{
+public class AArrayList<E> implements List<E>{
 	
-	private final static Logger LOG = Logger.getLogger(ArrayList.class.getName()); 
+	private final static Logger LOG = Logger.getLogger(AArrayList.class.getName()); 
 	
 	private Jedis client = null;
 	private String key   = null;
 	
-	private SecureRandom random = null;
-	
 	private Class<?> clazz;
 
-	public ArrayList() {
+	public AArrayList() {
 
 		this.client = new Jedis("localhost", 6379);
-		
-		random   = new SecureRandom();
-		this.key = new BigInteger(130, this.random).toString(32).substring(15);
+		this.key = Utils.slug();
 		
 		LOG.info(String.format("Created object with key: %s", this.key));
-		
 	}
 	
 
@@ -59,13 +54,6 @@ public class ArrayList<E> implements List<E>{
 
 		int i = 0;
 		for(String item : results){
-//			if (this.clazz == Integer.class){
-//				os[i] = castTo(Integer.parseInt(item));
-//			} else if(this.clazz == Long.class) {
-//				os[i] = castTo(Long.parseLong(item));
-//			} else {
-//				os[i] = castTo(item);
-//			}
 			os[i] = Utils.decode(item, this.clazz);
 			i++;
 		}
@@ -78,13 +66,6 @@ public class ArrayList<E> implements List<E>{
 
 		int i = 0;
 		for(String item : results){
-//			if (this.clazz == Integer.class){
-//				a[i] = (T) castTo(Integer.parseInt(item));
-//			} else if(this.clazz == Long.class) {
-//				a[i] = (T) castTo(Long.parseLong(item));
-//			} else {
-//				a[i] = (T) castTo(item);
-//			}
 			a[i] = (T) Utils.decode(item, this.clazz);
 			i++;
 		}
@@ -97,7 +78,6 @@ public class ArrayList<E> implements List<E>{
 	}
 
 	public boolean remove(Object o) {
-//		String obj = o.toString();
 		return this.client.lrem(this.key, 1, Utils.encode(o)) > 0L;
 	}
 
@@ -139,15 +119,7 @@ public class ArrayList<E> implements List<E>{
 			result = results.get(0);
 		}
 		return castTo(Utils.decode(result, this.clazz));
-		
-//		if (this.clazz == Integer.class){
-//			return castTo(Integer.parseInt(result));
-//		} else if(this.clazz == Long.class) {
-//			return castTo(Long.parseLong(result));
-//		} else {
-//			return castTo(result);
-//		}
-		
+
 	}
 
 	public E set(int index, E element) {
