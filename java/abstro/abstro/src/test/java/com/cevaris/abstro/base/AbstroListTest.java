@@ -1,5 +1,6 @@
 package com.cevaris.abstro.base;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,20 +15,6 @@ import junit.framework.TestCase;
 public class AbstroListTest extends TestCase {
 	
 	Jedis client = new Jedis("localhost", 6379);
-	
-	class Inventory {
-		private List<Item> items;
-		public Inventory() {
-			this.items = new ArrayList<Item>();
-			this.items.add(new Item());
-		}
-	}
-	class Item {
-		private String name;
-		public Item() {
-			this.name = Utils.slug();
-		}
-	}
 	
 	@AfterClass
     public void tearDown() {
@@ -153,6 +140,32 @@ public class AbstroListTest extends TestCase {
         assertTrue(alist.add(10L));
         assertTrue(alist.add(15L));
         assertTrue(alist.add(16L));
+        Object blist[] = alist.toArray();
+        assertNotNull(blist);
+        System.out.print("{ ");
+        for(Object l : blist) { System.out.print(l +", "); }
+        System.out.println("}");
+    }
+	
+	public void testComplexObjectItem() {
+        List<Item> alist = new AArrayList<Item>();
+        assertNotNull(alist);
+        assertTrue(alist.add(new Item()));
+        assertTrue(alist.add(new Item()));
+        assertTrue(alist.add(new Item()));
+        Object blist[] = alist.toArray();
+        assertNotNull(blist);
+        System.out.print("{ ");
+        for(Object l : blist) { System.out.print(l +", "); }
+        System.out.println("}");
+    }
+	
+	public void testComplexObjectInventory() {
+        List<Inventory> alist = new AArrayList<Inventory>();
+        assertNotNull(alist);
+        assertTrue(alist.add(new Inventory()));
+        assertTrue(alist.add(new Inventory()));
+        assertTrue(alist.add(new Inventory()));
         Object blist[] = alist.toArray();
         assertNotNull(blist);
         System.out.print("{ ");

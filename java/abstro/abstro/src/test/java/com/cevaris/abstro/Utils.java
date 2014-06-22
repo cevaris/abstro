@@ -5,8 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
@@ -14,7 +14,8 @@ import org.apache.commons.codec.binary.Base64;
 public class Utils {
 	
 	public static final Base64 b64 = new Base64();
-	public static final SecureRandom srandom = new SecureRandom();
+	public static final Random rand = new Random(System.currentTimeMillis());
+	public static final SecureRandom srand = new SecureRandom();
 	
 	public static String slug(){ return slug(15); }
 	public static String slug(int length){
