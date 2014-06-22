@@ -2,7 +2,6 @@ package com.cevaris.abstro.base;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -28,7 +27,7 @@ Jedis client = new Jedis("localhost", 6379);
         assertNotNull(aMap);
     }
 	
-	public void testPut() {
+	public void testPutGet() {
         Map<String, Integer> aMap = new AHashMap<String, Integer>();
         assertNotNull(aMap);
         assertNotNull(aMap.put("a", 1));
@@ -40,5 +39,7 @@ Jedis client = new Jedis("localhost", 6379);
         assertTrue(aMap.get("b") == 2);
         assertTrue(aMap.get("b").getClass() == Integer.class);
     }
+	
+	
 
 }
