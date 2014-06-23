@@ -40,8 +40,7 @@ public class AArrayList<E> implements List<E>, Serializable{
 	}
 
 	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public Iterator<E> iterator() {
