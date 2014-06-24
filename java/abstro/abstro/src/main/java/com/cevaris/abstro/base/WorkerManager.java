@@ -24,11 +24,17 @@ public class WorkerManager {
             threads[i].start();
         }
     }
-
-    public void execute(Worker<?> r) {
+    
+    public void enqueue(Worker<?> r) {
         synchronized(queue) {
             queue.addLast(r);
             queue.notify();
+        }
+    }
+
+    public boolean isWorking() {
+        synchronized(queue) {
+        	return !this.queue.isEmpty();
         }
     }
 

@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 import com.cevaris.abstro.Utils;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
 
 public class AHashMap<K, V> implements Map<K, V>, Serializable{
 
