@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 
 import org.junit.AfterClass;
 
+import com.cevaris.abstro.Utils;
 import com.cevaris.abstro.base.examples.AddWorker;
 
 import redis.clients.jedis.Jedis;
@@ -51,6 +52,20 @@ public class AddWorkerTest extends TestCase {
         assertNotNull(wrk.validate());
         assertNotNull(wrk.execute());
         assertEquals(wrk.result(), 4.0);
+    }
+	
+	
+	public void testSerializatoin() {
+        Worker<Double> wrk = new AddWorker<Double>().
+        		setArgs(new String[]{"1", "3"});
+        assertNotNull(wrk.validate());
+        
+        String serializedObj = Utils.encode(wrk);
+        assertNotNull(serializedObj);
+        Worker<Double> wrk2 = Utils.decode(serializedObj, Worker.class);
+        assertNotNull(wrk2);
+        assertNotNull(wrk2.validate());
+        assertEquals(wrk.result(), wrk2.result());
     }
 	
 }
