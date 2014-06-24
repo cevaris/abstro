@@ -2,7 +2,6 @@ package com.cevaris.abstro.base.examples;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -37,15 +36,14 @@ public class AddWorker<E> extends Worker<E> implements Serializable {
 		
 		return this;		
 	}
-	
+
 	@Override
-	public Worker<E> execute(){
+	public void run() {
 		Double base = 0.0;
 		for(String val : this.args){
 			base += Double.parseDouble(val);
 		}
 		this.result = castTo(base);
-		return this;		
 	}
 	
 	

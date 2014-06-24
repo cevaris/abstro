@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public abstract class Worker<E> implements Serializable {
+public abstract class Worker<E> implements Serializable, Runnable {
 
 	private static final long serialVersionUID = -9051196502774620555L;
 	private static final Logger LOG = Logger.getLogger(Worker.class.getName());
@@ -26,12 +26,17 @@ public abstract class Worker<E> implements Serializable {
 		return this.result;
 	}
 	
-	public abstract Worker<E> execute();
+//	public abstract Worker<E> execute();
 	
 	
 	@SuppressWarnings("unchecked")
 	protected E castTo(Object obj){
 		return (E) obj;
+	}
+
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
