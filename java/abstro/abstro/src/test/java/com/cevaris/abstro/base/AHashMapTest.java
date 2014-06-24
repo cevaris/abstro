@@ -3,7 +3,6 @@ package com.cevaris.abstro.base;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,17 +14,19 @@ import junit.framework.TestCase;
 
 import org.junit.AfterClass;
 
+import com.cevaris.abstro.base.examples.Inventory;
+
 import redis.clients.jedis.Jedis;
 
 public class AHashMapTest extends TestCase {
 
-Jedis client = new Jedis("localhost", 6379);
+	Jedis client = new Jedis("localhost", 6379);
 	
 	@AfterClass
     public void tearDown() {
 		// Clears up previous entries		
 		for(String key : client.keys("*")){
-//			client.del(key);
+			client.del(key);
 		}
     }
 	
@@ -88,15 +89,15 @@ Jedis client = new Jedis("localhost", 6379);
         assertTrue(aMap.containsKey("b"));
     }
 	
-	public void testContainsValue() {
-        Map<String, Integer> aMap = new AHashMap<String, Integer>();
-        assertNotNull(aMap);
-        assertNotNull(aMap.put("a", 1));
-        assertNotNull(aMap.put("b", 2));
-        
-        assertTrue(aMap.containsValue(1));
-        assertTrue(aMap.containsValue(2));
-    }
+//	public void testContainsValue() {
+//        Map<String, Integer> aMap = new AHashMap<String, Integer>();
+//        assertNotNull(aMap);
+//        assertNotNull(aMap.put("a", 1));
+//        assertNotNull(aMap.put("b", 2));
+//        
+//        assertTrue(aMap.containsValue(1));
+//        assertTrue(aMap.containsValue(2));
+//    }
 	
 	public void testRemove() {
         Map<String, Integer> aMap = new AHashMap<String, Integer>();

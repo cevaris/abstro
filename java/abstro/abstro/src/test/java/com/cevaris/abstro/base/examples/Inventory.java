@@ -1,4 +1,4 @@
-package com.cevaris.abstro.base;
+package com.cevaris.abstro.base.examples;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.cevaris.abstro.Utils;
 
-class Inventory implements Serializable {
+public class Inventory implements Serializable {
 	private static final long serialVersionUID = 1943627537386162843L;
 	private List<Item> items;
 	private List<Integer> ints;

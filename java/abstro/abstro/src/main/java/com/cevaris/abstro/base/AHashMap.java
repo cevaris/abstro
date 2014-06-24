@@ -45,12 +45,12 @@ public class AHashMap<K, V> implements Map<K, V>, Serializable{
 	}
 
 	public boolean containsValue(Object value) {
-		ScanParams params = new ScanParams();
-        params.match(Utils.encode(value));
-        ScanResult<Entry<String, String>> scanResults = this.client.hscan(this.key, ScanParams.SCAN_POINTER_START, params);
-        System.out.println(Utils.encode(value));
-        System.out.println(this.client.hvals(this.key));
-        System.out.println("TEST" + scanResults.getResult().size() + "TEST");
+//		ScanParams params = new ScanParams();
+//        params.match(Utils.encode(value));
+//        ScanResult<Entry<String, String>> scanResults = this.client.hscan(this.key, ScanParams.SCAN_POINTER_START, params);
+//        System.out.println(Utils.encode(value));
+//        System.out.println(this.client.hvals(this.key));
+//        System.out.println("TEST" + scanResults.getResult().size() + "TEST");
         return false;
 	}
 

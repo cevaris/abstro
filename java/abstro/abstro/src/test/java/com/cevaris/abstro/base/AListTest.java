@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.junit.AfterClass;
 
+import com.cevaris.abstro.base.examples.Inventory;
+import com.cevaris.abstro.base.examples.Item;
+
 import redis.clients.jedis.Jedis;
 
 import junit.framework.TestCase;
