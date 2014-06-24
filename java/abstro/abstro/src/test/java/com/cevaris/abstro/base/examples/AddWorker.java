@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import com.cevaris.abstro.base.Worker;
 
-public class AddWorker extends Worker implements Serializable {
+public class AddWorker<E> extends Worker<E> implements Serializable {
 	
 	private static final long serialVersionUID = 8662215365214326806L;
 	private static final Logger LOG = Logger.getLogger(AddWorker.class.getName());
@@ -19,13 +19,13 @@ public class AddWorker extends Worker implements Serializable {
 		return this.args;
 	}
 	
-	public AddWorker setArgs(String[] args){
+	public Worker<E> setArgs(String[] args){
 		this.args.addAll(Arrays.asList(args));
 		return this;
 	}
 	
 	@Override
-	public Worker validate(){
+	public Worker<E> validate(){
 		
 		if(this.args.size() < 2){
 			throw new IllegalArgumentException("Not enough args, need atleast 2.");
@@ -39,13 +39,12 @@ public class AddWorker extends Worker implements Serializable {
 	}
 	
 	@Override
-	public Worker execute(){
-		Integer base = 0;
+	public Worker<E> execute(){
+		Double base = 0.0;
 		for(String val : this.args){
-			base += Integer.parseInt(val);
+			base += Double.parseDouble(val);
 		}
-		this.result = base.toString();
-		
+		this.result = castTo(base);
 		return this;		
 	}
 	

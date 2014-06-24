@@ -22,12 +22,12 @@ public class AddWorkerTest extends TestCase {
     }
 	
 	public void testCreate() {
-        Worker wrk = new AddWorker();
+        Worker<Double> wrk = new AddWorker<Double>();
         assertNotNull(wrk);
     }
 	
 	public void testIllegalArgumentException() {
-        Worker wrk = new AddWorker();
+        Worker<Double> wrk = new AddWorker<Double>();
         assertNotNull(wrk);
         try{
         	wrk.validate();
@@ -36,7 +36,7 @@ public class AddWorkerTest extends TestCase {
     }
 	
 	public void testSetArgs() {
-        Worker wrk = new AddWorker().
+        Worker<Double> wrk = new AddWorker<Double>().
         		setArgs(new String[]{"0", "3"});
         assertNotNull(wrk);
         assertNotNull(wrk.validate());
@@ -45,12 +45,12 @@ public class AddWorkerTest extends TestCase {
     }
 	
 	public void testExecute() {
-        Worker wrk = new AddWorker().
+        Worker<Double> wrk = new AddWorker<Double>().
         		setArgs(new String[]{"1", "3"});
         assertNotNull(wrk);
         assertNotNull(wrk.validate());
         assertNotNull(wrk.execute());
-        assertEquals(wrk.result(), "4");
+        assertEquals(wrk.result(), 4.0);
     }
 	
 }
