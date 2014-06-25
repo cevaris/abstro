@@ -31,8 +31,7 @@ public class AQueue<E> implements Queue<E>, Serializable {
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.client.llen(this.key) == 0L;
 	}
 
 	public boolean contains(Object o) {

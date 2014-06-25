@@ -1,7 +1,5 @@
 package com.cevaris.abstro.base;
 
-import static org.junit.Assert.*;
-
 import java.util.Queue;
 
 import junit.framework.TestCase;
@@ -33,6 +31,7 @@ public class AQueueTest extends TestCase {
 		Queue<Item> qItm = new AQueue<Item>();
         assertNotNull(qItm);
         assertEquals(qItm.size(), 0);
+        assertTrue(qItm.isEmpty());
         qItm.add(new Item());
         qItm.add(new Item());
         qItm.add(new Item());
