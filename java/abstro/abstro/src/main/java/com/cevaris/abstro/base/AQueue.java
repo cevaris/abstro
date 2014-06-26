@@ -3,6 +3,8 @@ package com.cevaris.abstro.base;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.logging.Logger;
 
@@ -35,82 +37,113 @@ public class AQueue<E> implements Queue<E>, Serializable {
 	}
 
 	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public boolean addAll(Collection<? extends E> c) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result = true;
+		for(E e : c){
+			result = result && add(e);			
+		}
+		return result;
 	}
 
 	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		destroy();
 	}
 
 	public boolean add(E e) {
-		return this.client.rpush(this.key, Utils.encode(e)) > 0L;
+		if(this.client.rpush(this.key, Utils.encode(e)) > 0L){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public boolean offer(E e) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public E remove() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Not Implmented");
 	}
 
 	public E poll() {
-		// TODO Auto-generated method stub
-		return null;
+		String result = this.client.lpop(this.key);
+		if(result != null){
+			System.out.println(Utils.decode(result));
+			return castTo(Utils.decode(result));
+		} else {
+			return null;
+		}
 	}
 
 	public E element() {
-		// TODO Auto-generated method stub
-		return null;
+		if(this.isEmpty()){
+			throw new NoSuchElementException();
+		}else {
+			return peek();
+		}
 	}
 
 	public E peek() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> results = this.client.lrange(this.key, 0, 0);
+		String result = null;
+		if(results.size() != 1) {
+			return null;
+		} else {
+			result = results.get(0);
+		}
+		return castTo(Utils.decode(result));
+	}
+	
+	
+	
+	// Custom definitions
+	
+	@SuppressWarnings("unchecked")
+	public E castTo(final Object obj) {
+		// Only call after checking type!!!
+		return (E) obj;
+	}
+	
+	private boolean destroy(){
+		return this.client.del(this.key) > 0;
+	}
+	
+	@Override
+	public void finalize() throws Throwable {
+		LOG.info("Deleted Object: "+this.key);
+		destroy();
+		super.finalize();
 	}
 
 }

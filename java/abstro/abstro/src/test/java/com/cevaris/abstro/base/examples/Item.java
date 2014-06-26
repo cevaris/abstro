@@ -10,8 +10,11 @@ public class Item implements Serializable {
 	public Item() {
 		this.name = Utils.slug();
 	}
+	public String getName() {
+		return name;
+	}
 	@Override
 	public String toString() {
-		return this.name;
+		return String.format("Item: %s",this.name);
 	}
 }

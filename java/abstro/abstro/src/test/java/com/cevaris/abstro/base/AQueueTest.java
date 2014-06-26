@@ -37,5 +37,25 @@ public class AQueueTest extends TestCase {
         qItm.add(new Item());
         assertEquals(qItm.size(), 3);
     }
+	
+	public void testPeek() {
+		Queue<Item> qItm = new AQueue<Item>();
+        assertNotNull(qItm);
+        qItm.add(new Item());
+        qItm.add(new Item());
+        assertNotNull(qItm.peek());
+        assertEquals(qItm.peek().getName(), qItm.peek().getName());
+    }
+	
+	public void testPoll() {
+		Queue<Item> qItm = new AQueue<Item>();
+        assertNotNull(qItm);
+        assertNull(qItm.poll());
+        qItm.add(new Item());
+        qItm.add(new Item());
+        assertNotNull(qItm.poll());
+        assertNotNull(qItm.poll());
+        assertNull(qItm.poll());
+    }
 
 }
